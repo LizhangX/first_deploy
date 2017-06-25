@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Most Popular</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--<link href="css/style.css" rel="stylesheet">-->
+    </head>
+    <body>
+        <h1>Most Popular Secrets...</h1>
+        <a href={% url 'success' %}>back</a>
+        {% for secret in secrets %}
+            <p>
+                {{secret.secret}}
+                ({{secret.created_at}})
+                **{{secret.like.all|length}} likes**
+                {% if current_user not in secret.like.all %}
+                    <a href='{% url 'like' secret_id=secret.id location=2 %}'>like</a>
+                {% else %}
+                    You liked this.
+                {% endif %}
+                
+                {% if current_user == secret.user %}
+                    You post this.<a href='{% url 'delete' secret_id=secret.id location=2 %}'>delete</a>
+                {% endif %}
+            </p>
+        {% endfor %}
+            
+    </body>
+</html>

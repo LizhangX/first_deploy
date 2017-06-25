@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Success</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--<link href="css/style.css" rel="stylesheet">-->
+    </head>
+    <body>
+        <h1>Hello {{current_user.first_name}}</h1>
+        <a href={% url 'logout' %}><button type="">logout</button></a>
+        <form action='{% url "postSecret" %}' method="post">
+            {% csrf_token %}
+            <textarea name="postSecret" rows="10" cols="50" placeholder="Your secret here..."></textarea>
+            <p></p>
+            <input type="submit" name="" value="Post">
+        </form>
+
+
+
+        <a href='{% url 'popular' %}'>Most Popular Secrets</a>
+
+
+        <h1>Recent Secrets...</h1>
+        
+        {% for i in secrets %}
+            <p>{{ i.secret }}
+                **{{i.like.all|length}} likes**
+                {{i.created_at|timesince }} ago
+                {% if current_user not in i.like.all %}
+                    <a href='{% url 'like' secret_id=i.id location=1 %}'>like</a>
+                {% else %}
+                    You liked this.
+                {% endif %}
+                
+                {% if current_user == i.user %}
+                    You posted this.<a href='{% url 'delete' secret_id=i.id location=1 %}'>delete</a>
+                {% endif %}
+                
+            </p> 
+        {% endfor %}
+            
+            
+    </body>
+</html>
